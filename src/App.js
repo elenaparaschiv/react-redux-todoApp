@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import {addTodo, deleteTodo} from './actions/todo.actions';
+import {addTodo, deleteTodo, completeTodo} from './actions/todo.actions';
+import './App.css';
 
 
 const mapStateToProps = state => ({
   allTodos: state.todoReducer.allTodos,
-  completedTodos: state.todoReducer.completedTodos,
+  todosCompleted: state.todoReducer.todosCompleted,
 });
 
 const mapDispatchToProps = dispatch => ({
   addTodo: (todo) => dispatch(addTodo(todo)),
-  deleteTodo: (todo, index) => dispatch(deleteTodo(todo, index)),
-
+  deleteTodo: (index) => dispatch(deleteTodo(index)),
+  completeTodo: (todo) => dispatch(completeTodo(todo)),
 });
-
 
 class App extends Component {
  constructor(props) {
@@ -21,46 +21,59 @@ class App extends Component {
    this.state = {
     newValue : ''
   }
-
  }
 
   render() {
-    const {allTodos, addTodo, deleteTodo}=this.props;
+    const {allTodos, todosCompleted, addTodo, deleteTodo, completeTodo}=this.props;
     const{newValue} = this.state;
-    console.log('newValue', newValue);
 
     const getNewTodo = (event) =>{
-     console.log(event.target.value);
      this.setState({newValue: event.target.value})
     }
 
-    const whichToDelete = (todo, index) => {
-      deleteTodo(todo, index);
-      console.log('index', index);
+    const submitNewTodo = (newValue) => {
+      addTodo(newValue);
+      this.setState({newValue: ''});
     }
+
     return (
-      <div className="App">
-        <h2>Todo App </h2>
-        <div>
+      <div className="app">
+        <div className="all-todos">
+          <h2> Todo list: </h2>
+          <div>
+            {
+              allTodos.map((todo, index) =>
+              <div key={index}>
+                <p className="todo-item" onClick={() => completeTodo(index)}>
+                  {todo}
+                </p>
+                <button onClick={() => deleteTodo(index)}>
+                  Delete Todo
+                </button>
+              </div>
+            )
+            }
+          </div>
+          <input className="new-todo" value={this.state.newValue} onChange={(event) => getNewTodo(event)} />
+          <button onClick={() => submitNewTodo(newValue)}>
+            Add Todo
+          </button>
+        </div>
+        <div className="todos-completed">
+          <h2>Todos completed: </h2>
           {
-            allTodos.map((todo, index) =>
-            <div  key={index}>
-              <p>{todo}</p>
-              <button onClick={() => whichToDelete(todo, index)}>
-                Delete Todo
-              </button>
-            </div>
-          )
+            todosCompleted.map((todoCompleted, index) =>
+              <div>
+                <p className="todo-completed">
+                  {todoCompleted}
+                </p>
+              </div>
+            )
           }
         </div>
-        <input value={this.state.newValue} onChange={(event) => getNewTodo(event)} />
-        <button onClick={() => addTodo(newValue)}>
-         Add Todo
-         </button>
       </div>
     );
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-

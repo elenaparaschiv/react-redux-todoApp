@@ -6,22 +6,19 @@ export const addTodo = todo => ({
   payload: todo,
 })
 
-export const deleteTodo = (todo, index) => ({
+export const deleteTodo = index => ({
   type: ACTIONS.DELETE_TODO,
-  payload: {
-    todo,
-    index
-  }
+  payload: index,
 })
 
-export const completeTodo = todo => ({
+export const completeTodo = index => ({
   type: ACTIONS.COMPLETE_TODO,
-  payload: todo,
+  payload: index,
 })
 
 
 export default {
   addTodo,
   deleteTodo,
-  completeTodo
+  completeTodo,
 }

@@ -7,13 +7,3 @@ export const ACTIONS = {
 export default {
   ACTIONS
 }
-
-/*
-  Requirements
-// it should delete todo
-// it should complete todo (it should see for each todo if completed/not)
-
-Done:
-// it should see all todos
-// it should add todo
-*/
